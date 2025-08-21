@@ -253,7 +253,7 @@ function App() {
         
         <div className={`spoiler-image-container ${fadeInElements.image ? 'fade-in' : 'fade-out'}`}>
           <img 
-            src="/spoiler imagen.jpg" 
+            src="./spoiler imagen.jpg" 
             alt="Regalo sorpresa" 
             className={`spoiler-image ${isImageRevealed ? 'revealed' : ''}`}
             onClick={handleImageClick}
@@ -261,64 +261,64 @@ function App() {
         </div>
       </div>
 
-      <div className="penguins-container">
-        <div className="penguin penguin-1">
-          <img 
-            key={`penguin1-${gifKey}`}
-            src={`/penguin gif 1.gif?t=${gifKey}`} 
-            alt="Pingüino 1" 
-          />
+              <div className="penguins-container">
+          <div className="penguin penguin-1">
+            <img 
+              key={`penguin1-${gifKey}`}
+              src={`./penguin gif 1.gif?t=${gifKey}`} 
+              alt="Pingüino 1" 
+            />
+          </div>
+          <div className="penguin penguin-2">
+            <img 
+              key={`penguin2-${gifKey}`}
+              src={`./penguin gif 2.gif?t=${gifKey}`} 
+              alt="Pingüino 2" 
+            />
+          </div>
+          <div className="penguin penguin-3">
+            <img 
+              key={`penguin3-${gifKey}`}
+              src={`./pengiun gif 3.gif?t=${gifKey}`} 
+              alt="Pingüino 3" 
+            />
+          </div>
+          <div className="penguin penguin-4">
+            <img 
+              key={`penguin4-${gifKey}`}
+              src={`./penguin gif 4.gif?t=${gifKey}`} 
+              alt="Pingüino 4" 
+            />
+          </div>
+          <div className="penguin penguin-5">
+            <img 
+              key={`penguin5-${gifKey}`}
+              src={`./penguin gif 5.gif?t=${gifKey}`} 
+              alt="Pingüino 5" 
+            />
+          </div>
+          <div className="penguin kitty-1">
+            <img 
+              key={`kitty1-${gifKey}`}
+              src={`./kitty gif 1.gif?t=${gifKey}`} 
+              alt="Hello Kitty" 
+            />
+          </div>
+          <div className="penguin frog-1">
+            <img 
+              key={`frog1-${gifKey}`}
+              src={`./frog 1.webp?t=${gifKey}`} 
+              alt="Rana 1" 
+            />
+          </div>
+          <div className="penguin frog-2">
+            <img 
+              key={`frog2-${gifKey}`}
+              src={`./frog 2.webp?t=${gifKey}`} 
+              alt="Rana 2" 
+            />
+          </div>
         </div>
-        <div className="penguin penguin-2">
-          <img 
-            key={`penguin2-${gifKey}`}
-            src={`/penguin gif 2.gif?t=${gifKey}`} 
-            alt="Pingüino 2" 
-          />
-        </div>
-        <div className="penguin penguin-3">
-          <img 
-            key={`penguin3-${gifKey}`}
-            src={`/pengiun gif 3.gif?t=${gifKey}`} 
-            alt="Pingüino 3" 
-          />
-        </div>
-        <div className="penguin penguin-4">
-          <img 
-            key={`penguin4-${gifKey}`}
-            src={`/penguin gif 4.gif?t=${gifKey}`} 
-            alt="Pingüino 4" 
-          />
-        </div>
-        <div className="penguin penguin-5">
-          <img 
-            key={`penguin5-${gifKey}`}
-            src={`/penguin gif 5.gif?t=${gifKey}`} 
-            alt="Pingüino 5" 
-          />
-        </div>
-        <div className="penguin kitty-1">
-          <img 
-            key={`kitty1-${gifKey}`}
-            src={`/kitty gif 1.gif?t=${gifKey}`} 
-            alt="Hello Kitty" 
-          />
-        </div>
-        <div className="penguin frog-1">
-          <img 
-            key={`frog1-${gifKey}`}
-            src={`/frog 1.webp?t=${gifKey}`} 
-            alt="Rana 1" 
-          />
-        </div>
-        <div className="penguin frog-2">
-          <img 
-            key={`frog2-${gifKey}`}
-            src={`/frog 2.webp?t=${gifKey}`} 
-            alt="Rana 2" 
-          />
-        </div>
-      </div>
     </div>
   )
 }
