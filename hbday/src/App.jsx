@@ -5,6 +5,12 @@ function App() {
   const [sparkles, setSparkles] = useState([])
   const [gifKey, setGifKey] = useState(0)
   const [confetti, setConfetti] = useState([])
+  const [isImageRevealed, setIsImageRevealed] = useState(false)
+  const [fadeInElements, setFadeInElements] = useState({
+    title: false,
+    text: false,
+    image: false
+  })
   const [stars, setStars] = useState([
     { id: 1, x: 20, y: 30, size: 20, rotation: 0, twinkleSpeed: 1.5 },
     { id: 2, x: 80, y: 60, size: 15, rotation: 45, twinkleSpeed: 2 },
@@ -86,6 +92,30 @@ function App() {
   }, [])
 
   useEffect(() => {
+    const titleTimer = setTimeout(() => {
+      setFadeInElements(prev => ({ ...prev, title: true }))
+    }, 500)
+
+    const textTimer = setTimeout(() => {
+      setFadeInElements(prev => ({ ...prev, text: true }))
+    }, 1000)
+
+    const imageTimer = setTimeout(() => {
+      setFadeInElements(prev => ({ ...prev, image: true }))
+    }, 1500)
+
+    return () => {
+      clearTimeout(titleTimer)
+      clearTimeout(textTimer)
+      clearTimeout(imageTimer)
+    }
+  }, [])
+
+  const handleImageClick = () => {
+    setIsImageRevealed(true)
+  }
+
+  useEffect(() => {
     const confettiAnimation = setInterval(() => {
       setConfetti(prev => 
         prev.map(conf => ({
@@ -160,19 +190,75 @@ function App() {
       ))}
 
       <div className="birthday-message">
-        <h1>
-          {'¡Feliz Cumpleaños mi amor! :3'.split('').map((char, index) => (
-            <span 
-              key={index} 
-              className="wave-letter"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              {char === ' ' ? '\u00A0' : char}
-            </span>
-          ))}
+        <h1 className={fadeInElements.title ? 'fade-in' : 'fade-out'}>
+          {(() => {
+            const title = '¡Feliz Cumpleaños mi amor! :3';
+            const maxChars = 18;
+            const chars = title.split('');
+            const lines = [];
+            let currentLine = '';
+            
+            chars.forEach((char, index) => {
+              if (currentLine.length < maxChars) {
+                currentLine += char;
+              } else {
+                lines.push(currentLine);
+                currentLine = char;
+              }
+            });
+            if (currentLine) lines.push(currentLine);
+            
+            return lines.map((line, lineIndex) => (
+              <div key={lineIndex} className="title-line">
+                {line.split('').map((char, charIndex) => (
+                  <span 
+                    key={`${lineIndex}-${charIndex}`}
+                    className="wave-letter"
+                    style={{ animationDelay: `${(lineIndex * maxChars + charIndex) * 0.1}s` }}
+                  >
+                    {char === ' ' ? '\u00A0' : char}
+                  </span>
+                ))}
+              </div>
+            ));
+          })()}
         </h1>
         <div className="black-line"></div>
-        <p className="love-text">te amo mucho</p>
+        <p className={`love-text ${fadeInElements.text ? 'fade-in' : 'fade-out'}`}>
+          {(() => {
+            const text = "Hola amor, hoy es tu cumpleaños, estoy tan contento de compartir mi vida contigo, me haces muy feliz. Y quiero que en tu cumpleaños lo pases hermoso, no estés triste por nada. Yo siempre voy a estar para cuidarte y amarte. Además de esta página hay un regalito más que quiero darte, dale click a la imagen para revelar que es!";
+            const maxChars = 68;
+            const words = text.split(' ');
+            const lines = [];
+            let currentLine = '';
+            
+            words.forEach(word => {
+              if ((currentLine + word).length <= maxChars) {
+                currentLine += (currentLine ? ' ' : '') + word;
+              } else {
+                if (currentLine) lines.push(currentLine);
+                currentLine = word;
+              }
+            });
+            if (currentLine) lines.push(currentLine);
+            
+            return lines.map((line, index) => (
+              <span key={index}>
+                {line}
+                {index < lines.length - 1 && <br />}
+              </span>
+            ));
+          })()}
+        </p>
+        
+        <div className={`spoiler-image-container ${fadeInElements.image ? 'fade-in' : 'fade-out'}`}>
+          <img 
+            src="/spoiler imagen.jpg" 
+            alt="Regalo sorpresa" 
+            className={`spoiler-image ${isImageRevealed ? 'revealed' : ''}`}
+            onClick={handleImageClick}
+          />
+        </div>
       </div>
 
       <div className="penguins-container">
