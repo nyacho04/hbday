@@ -5,9 +5,13 @@ function App() {
   const [sparkles, setSparkles] = useState([])
   const [gifKey, setGifKey] = useState(0)
   const [confetti, setConfetti] = useState([])
+  const [stars, setStars] = useState([
+    { id: 1, x: 20, y: 30, size: 20, rotation: 0, twinkleSpeed: 1.5 },
+    { id: 2, x: 80, y: 60, size: 15, rotation: 45, twinkleSpeed: 2 },
+    { id: 3, x: 50, y: 80, size: 25, rotation: 90, twinkleSpeed: 1 }
+  ])
 
   useEffect(() => {
-    // Crear brillitos aleatorios
     const createSparkle = () => {
       const newSparkle = {
         id: Math.random(),
@@ -19,9 +23,8 @@ function App() {
       setSparkles(prev => [...prev, newSparkle])
     }
 
-    // Crear confeti
     const createConfetti = () => {
-      const colors = ['#ff6b9d', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff', '#5f27cd'];
+      const colors = ['#F2BAC9', '#BAF2E9', '#BAD7F2', '#F2E2BA', '#F2BAC9', '#BAF2E9', '#BAD7F2', '#F2E2BA'];
       const newConfetti = {
         id: Math.random(),
         x: Math.random() * 100,
@@ -34,23 +37,39 @@ function App() {
       setConfetti(prev => [...prev, newConfetti])
     }
 
-    // Crear brillitos cada 300ms
+    const createStar = () => {
+      const isMobile = window.innerWidth <= 768;
+      if (isMobile && Math.random() > 0.3) return;
+      
+      const newStar = {
+        id: Math.random(),
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: Math.random() * 15 + 10,
+        rotation: Math.random() * 360,
+        twinkleSpeed: Math.random() * 2 + 1
+      }
+      setStars(prev => [...prev, newStar])
+      console.log('Estrella creada:', newStar)
+    }
+
     const interval = setInterval(createSparkle, 300)
-
-    // Crear confeti cada 200ms
     const confettiInterval = setInterval(createConfetti, 200)
+    const starInterval = setInterval(createStar, window.innerWidth <= 768 ? 800 : 200)
 
-    // Limpiar brillitos antiguos
     const cleanup = setInterval(() => {
       setSparkles(prev => prev.slice(-20))
     }, 5000)
 
-    // Limpiar confeti antiguo
     const confettiCleanup = setInterval(() => {
       setConfetti(prev => prev.slice(-50))
     }, 8000)
 
-    // Forzar la reproducción de GIFs cada 5 segundos
+    const starCleanup = setInterval(() => {
+      const isMobile = window.innerWidth <= 768;
+      setStars(prev => prev.slice(isMobile ? -15 : -30))
+    }, 10000)
+
     const gifRefresh = setInterval(() => {
       setGifKey(prev => prev + 1)
     }, 5000)
@@ -58,13 +77,14 @@ function App() {
     return () => {
       clearInterval(interval)
       clearInterval(confettiInterval)
+      clearInterval(starInterval)
       clearInterval(cleanup)
       clearInterval(confettiCleanup)
+      clearInterval(starCleanup)
       clearInterval(gifRefresh)
     }
   }, [])
 
-  // Actualizar posición del confeti
   useEffect(() => {
     const confettiAnimation = setInterval(() => {
       setConfetti(prev => 
@@ -79,12 +99,22 @@ function App() {
     return () => clearInterval(confettiAnimation)
   }, [])
 
+  useEffect(() => {
+    const handleResize = () => {
+      const isMobile = window.innerWidth <= 768;
+      if (isMobile) {
+        setStars(prev => prev.slice(-15));
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div className="birthday-container">
-      {/* Fondo degradado */}
       <div className="gradient-bg"></div>
       
-      {/* Confeti cayendo */}
       {confetti.map(conf => (
         <div
           key={conf.id}
@@ -100,7 +130,6 @@ function App() {
         />
       ))}
       
-      {/* Brillitos flotantes */}
       {sparkles.map(sparkle => (
         <div
           key={sparkle.id}
@@ -115,12 +144,37 @@ function App() {
         />
       ))}
 
-      {/* Mensaje principal */}
+      {stars.map(star => (
+        <div
+          key={star.id}
+          className="star"
+          style={{
+            left: `${star.x}%`,
+            top: `${star.y}%`,
+            width: `${star.size}px`,
+            height: `${star.size}px`,
+            transform: `rotate(${star.rotation}deg)`,
+            animationDuration: `${star.twinkleSpeed}s`
+          }}
+        />
+      ))}
+
       <div className="birthday-message">
-        <h1>¡FELIZ CUMPLEAÑOS MI AMOR!</h1>
+        <h1>
+          {'¡Feliz Cumpleaños mi amor! :3'.split('').map((char, index) => (
+            <span 
+              key={index} 
+              className="wave-letter"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              {char === ' ' ? '\u00A0' : char}
+            </span>
+          ))}
+        </h1>
+        <div className="black-line"></div>
+        <p className="love-text">te amo mucho</p>
       </div>
 
-      {/* Pingüinos alrededor - más grandes y juntos */}
       <div className="penguins-container">
         <div className="penguin penguin-1">
           <img 
@@ -162,6 +216,20 @@ function App() {
             key={`kitty1-${gifKey}`}
             src={`/kitty gif 1.gif?t=${gifKey}`} 
             alt="Hello Kitty" 
+          />
+        </div>
+        <div className="penguin frog-1">
+          <img 
+            key={`frog1-${gifKey}`}
+            src={`/frog 1.webp?t=${gifKey}`} 
+            alt="Rana 1" 
+          />
+        </div>
+        <div className="penguin frog-2">
+          <img 
+            key={`frog2-${gifKey}`}
+            src={`/frog 2.webp?t=${gifKey}`} 
+            alt="Rana 2" 
           />
         </div>
       </div>
